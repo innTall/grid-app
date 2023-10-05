@@ -17,12 +17,12 @@ onMounted(() => {
 		am5dark.new(root),
 		am5animated.new(root)
 	]);
-
+	
 	let stockChart = root.container.children.push(
 		am5stock.StockChart.new(root, {})
 	);
 	// ================
-	// MAIN STOCK PANEL
+	// MAIN -STOCK- PANEL
 	// ================
 	let mainPanel = stockChart.panels.push(
 		am5stock.StockPanel.new(root, {
@@ -53,7 +53,7 @@ onMounted(() => {
 	// =====================
 	let valueSeries = mainPanel.series.push(
 		am5xy.CandlestickSeries.new(root, {
-			name: "valueSeries",
+			name: "BNBBUSD, 1D",
 			xAxis: dateAxis,
 			yAxis: valueAxis,
 			openValueYField: "open",
@@ -61,10 +61,55 @@ onMounted(() => {
 			lowValueYField: "low",
 			valueYField: "close",
 			valueXField: "date",
+			legendLabelText: "{name} - {highValueY}"
 		})
 	);
 	// Set main value series
-	mainPanel.set("CandlestickSeries", valueSeries); //??? stockChart.set("stockSeries", valueSeies)
+	stockChart.set("stockSeries", valueSeries);
+	// ======================
+	// CREATE -VOLUME- SERIES
+	// ======================
+	// Create *volume* axis
+	const volumeAxisRenderer = am5xy.AxisRendererY.new(root, {
+		inside: true
+	});
+	volumeAxisRenderer.labels.template.set("forceHidden", true);
+	volumeAxisRenderer.grid.template.set("forceHidden", true);
+	const volumeValueAxis = mainPanel.yAxes.push(
+		am5xy.ValueAxis.new(root, {
+			numberFormat: "#.#a",
+			height: am5.percent(30),
+			y: am5.percent(100),
+			centerY: am5.percent(100),
+			renderer: volumeAxisRenderer
+		})
+	);
+	// Create *volume* series
+	const volumeSeries = mainPanel.series.push(
+		am5xy.ColumnSeries.new(root, {
+			name: "Volume",
+			clustered: false,
+			valueXField: "date",
+			valueYField: "volume",
+			xAxis: dateAxis,
+			yAxis: volumeValueAxis
+		})
+	);
+	volumeSeries.columns.template.setAll({
+		strokeOpacity: 0,
+		fillOpacity: 0.6,
+		opacity: 0.5
+	});
+	// color columns by stock rules
+	volumeSeries.columns.template.adapters.add("fill", (fill, target) => {
+		const dataItem = target.dataItem;
+		if (dataItem) {
+			return stockChart.getVolumeColor(dataItem);
+		}
+		return fill;
+	})
+	// Set main volume series
+	stockChart.set("volumeSeries", volumeSeries);
 	// ==================
 	// DEFINE SOURCE DATA
 	// ==================
@@ -72,8 +117,28 @@ onMounted(() => {
 	am5.net.load('src/data/klines1d.json').then((result) => {
 		data = am5.JSONParser.parse(result.response);
 		valueSeries.data.setAll(data);
+		volumeSeries.data.setAll(data);
+		valueLegend.data.setAll([valueSeries]);
 	}).catch((result) => {
 		console.log("Error loading " + result.xhr.responseURL);
+	});
+	// ======
+	// LEGEND
+	// ======
+	const valueLegend = mainPanel.children.push(
+		am5.Legend.new(root, {
+			centerY: am5.percent(0),
+			y: am5.percent(0),
+			layout: root.verticalLayout
+		})
+	);
+	valueLegend.markers.template.setAll({
+		width: 8,
+		height: 8
+	});
+	valueLegend.labels.template.setAll({
+		fontSize: 10,
+		fill: am5.color(0xffff00)
 	});
 	// ======
 	// CURSOR
@@ -85,7 +150,8 @@ onMounted(() => {
 		})
 	);
 	dateAxis.set("tooltip",
-		am5.Tooltip.new(root, {})
+		am5.Tooltip.new(root, {
+		})
 	);
 	valueAxis.set("tooltip",
 		am5.Tooltip.new(root, {})
