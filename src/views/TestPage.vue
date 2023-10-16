@@ -3,8 +3,7 @@
 </script>
 
 <template>
-	<div class="h-screen">
-		
+	<div class="">
 	</div>
 </template>
 

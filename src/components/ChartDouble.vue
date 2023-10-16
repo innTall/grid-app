@@ -16,13 +16,13 @@ onMounted(() => {
 	// ============
 	root1 = am5.Root.new(chartdiv1.value);
 	root2 = am5.Root.new(chartdiv2.value);
-	 // =============
+	// =============
 	// my THEME RULE
 	// =============
 	const myTheme1 = am5.Theme.new(root1);
 	myTheme1.rule("AxisLabel").setAll({
 		fill: am5.color(0xffffff),
-		fontSize: 12
+		fontSize: 10
 	});
 	myTheme1.rule("AxisRenderer").setAll({
 		stroke: am5.color(0x008000),
@@ -38,7 +38,7 @@ onMounted(() => {
 	});
 	myTheme1.rule("Label").setAll({
 		fill: am5.color(0xffffff),
-		fontSize: 12
+		fontSize: 10
 	});
 	root1.setThemes([
 		myTheme1,
@@ -48,7 +48,7 @@ onMounted(() => {
 	const myTheme2 = am5.Theme.new(root2);
 	myTheme2.rule("AxisLabel").setAll({
 		fill: am5.color(0xffffff),
-		fontSize: 12
+		fontSize: 10
 	});
 	myTheme2.rule("AxisRenderer").setAll({
 		stroke: am5.color(0x008000),
@@ -64,7 +64,7 @@ onMounted(() => {
 	});
 	myTheme2.rule("Label").setAll({
 		fill: am5.color(0xffffff),
-		fontSize: 12
+		fontSize: 10
 	});
 	root2.setThemes([
 		myTheme2,
@@ -332,11 +332,11 @@ onMounted(() => {
 		strokeOpacity: 0
 	});
 	tooltipX1.label.setAll({
-		fontSize: 12
+		fontSize: 10
 		//fill: am5.color(0x1E90FF),
 	});
 	tooltipY1.label.setAll({
-		fontSize: 12
+		fontSize: 10
 		//fill: am5.color(0xffff00),
 	});
 	const tooltipX2 = am5.Tooltip.new(root2, {});
@@ -352,11 +352,11 @@ onMounted(() => {
 		strokeOpacity: 0
 	});
 	tooltipX2.label.setAll({
-		fontSize: 12
+		fontSize: 10
 		//fill: am5.color(0x1E90FF),
 	});
 	tooltipY2.label.setAll({
-		fontSize: 12
+		fontSize: 10
 		//fill: am5.color(0xffff00),
 	});
 	// ==========
@@ -429,14 +429,14 @@ onMounted(() => {
 </template-->
 
 <template>
-	<div class="h-full bg-gray-900">
-		
-			<!--div id="chartcontrols1" class="bg-gray-800"></div-->
-			<div ref="chartdiv1" class="h-1/2"></div>
-		
-			<!--div id="chartcontrols2" class="bg-gray-800"></div-->
-			<div ref="chartdiv2" class="h-1/2"></div>
-		
+	<div class="h-full w-3/4 py-12 bg-gray-900">
+
+		<!--div id="chartcontrols1" class="bg-gray-800"></div-->
+		<div ref="chartdiv1" class="h-1/2"></div>
+
+		<!--div id="chartcontrols2" class="bg-gray-800"></div-->
+		<div ref="chartdiv2" class="h-1/2"></div>
+
 	</div>
 </template>
 
