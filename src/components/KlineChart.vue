@@ -4,26 +4,56 @@ import * as am5xy from "@amcharts/amcharts5/xy";
 import * as am5stock from "@amcharts/amcharts5/stock";
 import am5dark from '@amcharts/amcharts5/themes/Dark';
 import am5animated from '@amcharts/amcharts5/themes/Animated';
-import { onMounted } from 'vue';
+import { shallowRef, onMounted } from 'vue';
 
 let root;
+const chartdiv = shallowRef(null);
 onMounted(() => {
-	// ===========================
-	// ROOT ELEMENT, THEMES, CHART
-	// ===========================
-	root = am5.Root.new("chartdiv");
-
+	// ============
+	// ROOT ELEMENT
+	// ============
+	root = am5.Root.new(chartdiv.value);
+	// =============
+	// my THEME RULE
+	// =============
+	const myTheme = am5.Theme.new(root);
+	myTheme.rule("AxisLabel").setAll({
+		fill: am5.color(0xffffff),
+		fontSize: 12
+	});
+	myTheme.rule("AxisRenderer").setAll({
+		stroke: am5.color(0x008000),
+		strokeOpacity: 1,
+		//strokeDasharray: [2, 2],
+		strokeWidth: 1
+	});
+	myTheme.rule("Grid").setAll({
+		strokeOpacity: 1,
+		stroke: am5.color(0x696969),
+		strokeDasharray: [5, 1],
+		strokeWidth: 0.2
+	});
+	myTheme.rule("Label").setAll({
+		fill: am5.color(0xffffff),
+		fontSize: 12
+	});
 	root.setThemes([
+		myTheme,
 		am5dark.new(root),
 		am5animated.new(root)
 	]);
-	
-	let stockChart = root.container.children.push(
-		am5stock.StockChart.new(root, {})	
+	// ==========
+	// STOCKCHART
+	// ==========
+	const stockChart = root.container.children.push(
+		am5stock.StockChart.new(root, {
+			panX: true,
+			wheelY: "zoomX"
+		})
 	);
-	// ================
+	// ==================
 	// MAIN -STOCK- PANEL
-	// ================
+	// ==================
 	let mainPanel = stockChart.panels.push(
 		am5stock.StockPanel.new(root, {
 			wheelY: "zoomX", // scale big/small
@@ -31,57 +61,44 @@ onMounted(() => {
 			pinchZoomX: true, // ?????????
 		})
 	);
-	// ==============================
-	// X-AXIS (date) & Y-AXIS (value)
-	// ==============================
+	// ===============
+	// X-AXIS & Y-AXIS
+	// ===============
 	const dateAxis = mainPanel.xAxes.push(
 		am5xy.DateAxis.new(root, {
 			baseInterval: { timeUnit: "day", count: 1 },
 			renderer: am5xy.AxisRendererX.new(root, {
 				strokeOpacity: 1,
 				strokeWidth: 1,
-				stroke: am5.color(0x696969),
-				minGridDistance: 30,
-				maxDeviation: 0.1 // top-left legend
-			}),
-			tooltip: am5.Tooltip.new(root, {})
+				stroke: am5.color(0x008000),
+				minGridDistance: 30
+			})
 		})
 	);
 	const valueAxis = mainPanel.yAxes.push(
 		am5xy.ValueAxis.new(root, {
 			renderer: am5xy.AxisRendererY.new(root, {
-				opposite: true,
 				strokeOpacity: 1,
 				strokeWidth: 1,
-				stroke: am5.color(0x696969)
-			}),
-			tooltip: am5.Tooltip.new(root, {}),
-			numberFormat: "#,###.0"
+				stroke: am5.color(0x008000),
+				opposite: true
+			})
 		})
 	);
-	const myTheme = am5.Theme.new(root);
-	myTheme.rule("AxisLabel").setAll({
-		fill: am5.color(0xDCDCDC),
-		fontSize: 10
-	});
-	myTheme.rule("Grid").setAll({
-		stroke: am5.color(0x696969),
-		visible: true
-	});
-	root.setThemes([myTheme]);
 	// =====================
 	// CREATE -VALUE- SERIES
 	// =====================
 	let valueSeries = mainPanel.series.push(
-		am5xy.CandlestickSeries.new(root, {
+		am5xy.CandlestickSeries.new(root, { //LineSeries.new()
 			name: "BNBBUSD, 1D",
 			xAxis: dateAxis,
 			yAxis: valueAxis,
 			openValueYField: "open",
 			highValueYField: "high",
 			lowValueYField: "low",
-			valueYField: "close",
 			valueXField: "date",
+			valueYField: "close",
+			clustered: false,
 			legendLabelText: "{name} - {highValueY}"
 		})
 	);
@@ -90,7 +107,7 @@ onMounted(() => {
 	// ======================
 	// CREATE -VOLUME- SERIES
 	// ======================
-	// Create *volume* axis
+	// Create *volume* AXIS
 	const volumeAxisRenderer = am5xy.AxisRendererY.new(root, {
 		inside: true
 	});
@@ -99,13 +116,13 @@ onMounted(() => {
 	const volumeValueAxis = mainPanel.yAxes.push(
 		am5xy.ValueAxis.new(root, {
 			numberFormat: "#.#a",
-			height: am5.percent(30),
+			height: am5.percent(40),
 			y: am5.percent(100),
 			centerY: am5.percent(100),
 			renderer: volumeAxisRenderer
 		})
 	);
-	// Create *volume* series
+	// Create *volume* SERIES
 	const volumeSeries = mainPanel.series.push(
 		am5xy.ColumnSeries.new(root, {
 			name: "Volume",
@@ -118,16 +135,17 @@ onMounted(() => {
 	);
 	volumeSeries.columns.template.setAll({
 		strokeOpacity: 0,
-		fillOpacity: 0.5
+		fillOpacity: 0.3,
+		fill: am5.color(0x898989)
 	});
 	// *** COLOR COLUMNS by stock rules ***
-	volumeSeries.columns.template.adapters.add("fill", (fill, target) => {
-		const dataItem = target.dataItem;
-		if (dataItem) {
-			return stockChart.getVolumeColor(dataItem);
-		}
-		return fill;
-	})
+	//volumeSeries.columns.template.adapters.add("fill", (fill, target) => {
+	//	const dataItem = target.dataItem;
+	//	if (dataItem) {
+	//		return stockChart.getVolumeColor(dataItem);
+	//	}
+	//	return fill;
+	//})
 	// Set main volume series
 	stockChart.set("volumeSeries", volumeSeries);
 	// ==================
@@ -137,19 +155,19 @@ onMounted(() => {
 	am5.net.load('src/data/klines1d.json').then((result) => {
 		data = am5.JSONParser.parse(result.response);
 		dateAxis.data.setAll(data);
-		valueAxis.data.setAll(data);
-		valueSeries.data.setAll(data);
-		volumeSeries.data.setAll(data);
-		valueLegend.data.setAll([valueSeries]);
+		//series.data.setAll(data);
+		valueSeries.data.setAll(data),
+			volumeSeries.data.setAll(data),
+			valueLegend.data.setAll([valueSeries]);
 	}).catch((result) => {
 		console.log("Error loading " + result.xhr.responseURL);
 	});
-	// ======
-	// LEGEND
-	// ======
+	// ==========
+	// ADD LEGEND
+	// ==========
 	const valueLegend = mainPanel.children.push(
 		am5.Legend.new(root, {
-			centerY: am5.percent(0),
+			centerY: am5.percent(20),
 			y: am5.percent(0),
 			layout: root.verticalLayout
 		})
@@ -158,38 +176,54 @@ onMounted(() => {
 		width: 8,
 		height: 8
 	});
-	valueLegend.labels.template.setAll({
-		fontSize: 10,
-		fill: am5.color(0xDCDCDC)
+	// ============
+	// ADD TOOLTIPS
+	// ============
+	const tooltipX = am5.Tooltip.new(root, {});
+	const tooltipY = am5.Tooltip.new(root, {});
+	tooltipX.get("background").setAll({
+		fillOpacity: 1,
+		fill: am5.color(0x0000FF),
+		strokeOpacity: 0
 	});
-	// ======
-	// CURSOR
-	// ======
+	tooltipY.get("background").setAll({
+		opacity: 1,
+		fill: am5.color(0x0000FF),
+		strokeOpacity: 0
+	});
+	tooltipX.label.setAll({
+		fontSize: 12
+		//fill: am5.color(0x1E90FF),
+	});
+	tooltipY.label.setAll({
+		fontSize: 12
+		//fill: am5.color(0xffff00),
+	});
+	// ==========
+	// ADD CURSOR
+	// ==========
 	mainPanel.set("cursor",
 		am5xy.XYCursor.new(root, {
 			xAxis: dateAxis,
-			yAxis: valueAxis,
-			tooltip: am5.Tooltip.new(root, {})
-		})
-	);
-	// cursor.lineY.set("visible", true);
-	dateAxis.set("tooltip",
-		am5.Tooltip.new(root, {})
-	);
-	valueAxis.set("tooltip",
-		am5.Tooltip.new(root, {
-			// forceHidden: false
+			yAxis: valueAxis
 		})
 	);
 	let cursor = mainPanel.get("cursor");
 	cursor.lineX.setAll({
-		stroke: am5.color(0x696969),
-		strokeWidth: 1
+		strokeDasharray: [1, 1],
+		stroke: am5.color(0xffffff),
+		strokeWidth: 0.5
 	});
 	cursor.lineY.setAll({
-		stroke: am5.color(0x696969),
-		strokeWidth: 1
+		strokeOpacity: 1,
+		strokeDasharray: [1, 1],
+		stroke: am5.color(0xffffff),
+		strokeWidth: 0.5
 	});
+	dateAxis.set("tooltip", tooltipX);
+	valueAxis.set("tooltip", tooltipY);
+	mainPanel.panelControls.set("forceHidden", true);
+
 	// ===============================
 	// PERIOD SELECTOR TO START SCREEN
 	// ===============================
@@ -201,9 +235,10 @@ onMounted(() => {
 	})
 });
 </script>
-
 <template>
-	<div id="chartdiv" class="h-96"></div>
+	<div class="h-screen">
+		<div ref="chartdiv" class="h-1/3"></div>
+	</div>
 </template>
 
 <style scoped></style>

@@ -1,10 +1,10 @@
 <script setup>
-import ChartDouble from '../components/ChartDouble.vue';
+
 </script>
 
 <template>
-	<div class="">
-		<ChartDouble />
+	<div class="h-screen">
+		
 	</div>
 </template>
 

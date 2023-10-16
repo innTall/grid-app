@@ -4,26 +4,76 @@ import * as am5xy from "@amcharts/amcharts5/xy";
 import * as am5stock from "@amcharts/amcharts5/stock";
 import am5dark from '@amcharts/amcharts5/themes/Dark';
 import am5animated from '@amcharts/amcharts5/themes/Animated';
-import { onMounted } from 'vue';
+import { shallowRef, onMounted } from 'vue';
 
 let root1;
 let root2;
+const chartdiv1 = shallowRef(null);
+const chartdiv2 = shallowRef(null);
 onMounted(() => {
-	// ===========================
-	// ROOT ELEMENT, THEMES, CHART
-	// ===========================
-	root1 = am5.Root.new("chartdiv1");
-	root2 = am5.Root.new("chartdiv2");
-
+	// ============
+	// ROOT ELEMENT
+	// ============
+	root1 = am5.Root.new(chartdiv1.value);
+	root2 = am5.Root.new(chartdiv2.value);
+	 // =============
+	// my THEME RULE
+	// =============
+	const myTheme1 = am5.Theme.new(root1);
+	myTheme1.rule("AxisLabel").setAll({
+		fill: am5.color(0xffffff),
+		fontSize: 12
+	});
+	myTheme1.rule("AxisRenderer").setAll({
+		stroke: am5.color(0x008000),
+		strokeOpacity: 1,
+		//strokeDasharray: [2, 2],
+		strokeWidth: 1
+	});
+	myTheme1.rule("Grid").setAll({
+		strokeOpacity: 1,
+		stroke: am5.color(0x696969),
+		strokeDasharray: [5, 1],
+		strokeWidth: 0.2
+	});
+	myTheme1.rule("Label").setAll({
+		fill: am5.color(0xffffff),
+		fontSize: 12
+	});
 	root1.setThemes([
+		myTheme1,
 		am5dark.new(root1),
 		am5animated.new(root1)
 	]);
+	const myTheme2 = am5.Theme.new(root2);
+	myTheme2.rule("AxisLabel").setAll({
+		fill: am5.color(0xffffff),
+		fontSize: 12
+	});
+	myTheme2.rule("AxisRenderer").setAll({
+		stroke: am5.color(0x008000),
+		strokeOpacity: 1,
+		//strokeDasharray: [2, 2],
+		strokeWidth: 1
+	});
+	myTheme2.rule("Grid").setAll({
+		strokeOpacity: 1,
+		stroke: am5.color(0x696969),
+		strokeDasharray: [5, 1],
+		strokeWidth: 0.2
+	});
+	myTheme2.rule("Label").setAll({
+		fill: am5.color(0xffffff),
+		fontSize: 12
+	});
 	root2.setThemes([
+		myTheme2,
 		am5dark.new(root2),
 		am5animated.new(root2)
 	]);
-
+	// ==========
+	// STOCKCHART
+	// ==========
 	let stockChart1 = root1.container.children.push(
 		am5stock.StockChart.new(root1, {})
 	);
@@ -35,13 +85,13 @@ onMounted(() => {
 	// ================
 	let mainPanel1 = stockChart1.panels.push(
 		am5stock.StockPanel.new(root1, {
-			wheelY: "zoomX", // scale big/small
+			wheelY: "zoomX",
 			panX: true
 		})
 	);
 	let mainPanel2 = stockChart2.panels.push(
 		am5stock.StockPanel.new(root2, {
-			wheelY: "zoomX", // scale big/small
+			wheelY: "zoomX",
 			panX: true
 		})
 	);
@@ -54,11 +104,11 @@ onMounted(() => {
 			renderer: am5xy.AxisRendererX.new(root1, {
 				strokeOpacity: 1,
 				strokeWidth: 1,
-				stroke: am5.color(0x696969),
+				stroke: am5.color(0x008000),
 				minGridDistance: 30,
 				maxDeviation: 0.1 // top-left legend
-			}),
-			tooltip: am5.Tooltip.new(root1, {})
+			})
+			//tooltip: am5.Tooltip.new(root1, {})
 		})
 	);
 	const dateAxis2 = mainPanel2.xAxes.push(
@@ -67,11 +117,11 @@ onMounted(() => {
 			renderer: am5xy.AxisRendererX.new(root2, {
 				strokeOpacity: 1,
 				strokeWidth: 1,
-				stroke: am5.color(0x696969),
-				minGridDistance: 30,
+				stroke: am5.color(0x008000),
+				minGridDistance: 40,
 				maxDeviation: 0.1 // top-left legend
-			}),
-			tooltip: am5.Tooltip.new(root2, {})
+			})
+			//tooltip: am5.Tooltip.new(root2, {})
 		})
 	);
 	const valueAxis1 = mainPanel1.yAxes.push(
@@ -80,9 +130,9 @@ onMounted(() => {
 				opposite: true,
 				strokeOpacity: 1,
 				strokeWidth: 1,
-				stroke: am5.color(0x696969)
+				stroke: am5.color(0x008000)
 			}),
-			tooltip: am5.Tooltip.new(root1, {}),
+			//tooltip: am5.Tooltip.new(root1, {}),
 			numberFormat: "#,###.0"
 		})
 	);
@@ -92,32 +142,12 @@ onMounted(() => {
 				opposite: true,
 				strokeOpacity: 1,
 				strokeWidth: 1,
-				stroke: am5.color(0x696969)
+				stroke: am5.color(0x008000)
 			}),
-			tooltip: am5.Tooltip.new(root2, {}),
+			//tooltip: am5.Tooltip.new(root2, {}),
 			numberFormat: "#,###.0"
 		})
 	);
-	const myTheme1 = am5.Theme.new(root1);
-	myTheme1.rule("AxisLabel").setAll({
-		fill: am5.color(0xDCDCDC),
-		fontSize: 10
-	});
-	myTheme1.rule("Grid").setAll({
-		stroke: am5.color(0x696969),
-		visible: true
-	});
-	root1.setThemes([myTheme1]);
-	const myTheme2 = am5.Theme.new(root2);
-	myTheme2.rule("AxisLabel").setAll({
-		fill: am5.color(0xDCDCDC),
-		fontSize: 10
-	});
-	myTheme2.rule("Grid").setAll({
-		stroke: am5.color(0x696969),
-		visible: true
-	});
-	root2.setThemes([myTheme2]);
 	// =====================
 	// CREATE -VALUE- SERIES
 	// =====================
@@ -131,6 +161,7 @@ onMounted(() => {
 			lowValueYField: "low",
 			valueYField: "close",
 			valueXField: "date",
+			//clustered: false,
 			legendLabelText: "{name} - {highValueY}"
 		})
 	);
@@ -146,6 +177,7 @@ onMounted(() => {
 			lowValueYField: "low",
 			valueYField: "close",
 			valueXField: "date",
+			//clustered: false,
 			legendLabelText: "{name} - {highValueY}"
 		})
 	);
@@ -182,16 +214,17 @@ onMounted(() => {
 	);
 	volumeSeries1.columns.template.setAll({
 		strokeOpacity: 0,
-		fillOpacity: 0.5
+		fillOpacity: 0.5,
+		fill: am5.color(0x898989)
 	});
 	// *** COLOR COLUMNS by stock rules ***
-	volumeSeries1.columns.template.adapters.add("fill", (fill, target) => {
-		const dataItem = target.dataItem;
-		if (dataItem) {
-			return stockChart1.getVolumeColor(dataItem);
-		}
-		return fill;
-	})
+	//volumeSeries1.columns.template.adapters.add("fill", (fill, target) => {
+	//	const dataItem = target.dataItem;
+	//	if (dataItem) {
+	//		return stockChart1.getVolumeColor(dataItem);
+	//	}
+	//	return fill;
+	//})
 	const volumeAxisRenderer2 = am5xy.AxisRendererY.new(root2, {
 		inside: true
 	});
@@ -219,16 +252,17 @@ onMounted(() => {
 	);
 	volumeSeries2.columns.template.setAll({
 		strokeOpacity: 0,
-		fillOpacity: 0.5
+		fillOpacity: 0.5,
+		fill: am5.color(0x898989)
 	});
 	// *** COLOR COLUMNS by stock rules ***
-	volumeSeries2.columns.template.adapters.add("fill", (fill, target) => {
-		const dataItem = target.dataItem;
-		if (dataItem) {
-			return stockChart2.getVolumeColor(dataItem);
-		}
-		return fill;
-	})
+	//volumeSeries2.columns.template.adapters.add("fill", (fill, target) => {
+	//	const dataItem = target.dataItem;
+	//	if (dataItem) {
+	//		return stockChart2.getVolumeColor(dataItem);
+	//	}
+	//	return fill;
+	//})
 	// Set main volume series
 	stockChart1.set("volumeSeries", volumeSeries1);
 	stockChart2.set("volumeSeries", volumeSeries2);
@@ -239,7 +273,7 @@ onMounted(() => {
 	am5.net.load('src/data/klines1d.json').then((result) => {
 		data1 = am5.JSONParser.parse(result.response);
 		dateAxis1.data.setAll(data1);
-		valueAxis1.data.setAll(data1);
+		valueAxis1.data.setAll(data1); // ?
 		valueSeries1.data.setAll(data1);
 		volumeSeries1.data.setAll(data1);
 		valueLegend1.data.setAll([valueSeries1]);
@@ -250,16 +284,16 @@ onMounted(() => {
 	am5.net.load('src/data/klines4h.json').then((result) => {
 		data2 = am5.JSONParser.parse(result.response);
 		dateAxis2.data.setAll(data2);
-		valueAxis2.data.setAll(data2);
+		valueAxis2.data.setAll(data2); // ?
 		valueSeries2.data.setAll(data2);
 		volumeSeries2.data.setAll(data2);
 		valueLegend2.data.setAll([valueSeries2]);
 	}).catch((result) => {
 		console.log("Error loading " + result.xhr.responseURL);
 	});
-	// ======
-	// LEGEND
-	// ======
+	// ==========
+	// ADD LEGEND
+	// ==========
 	const valueLegend1 = mainPanel1.children.push(
 		am5.Legend.new(root1, {
 			centerY: am5.percent(0),
@@ -270,10 +304,6 @@ onMounted(() => {
 	valueLegend1.markers.template.setAll({
 		width: 8,
 		height: 8
-	});
-	valueLegend1.labels.template.setAll({
-		fontSize: 10,
-		fill: am5.color(0xDCDCDC)
 	});
 	const valueLegend2 = mainPanel2.children.push(
 		am5.Legend.new(root2, {
@@ -286,63 +316,96 @@ onMounted(() => {
 		width: 8,
 		height: 8
 	});
-	valueLegend2.labels.template.setAll({
-		fontSize: 10,
-		fill: am5.color(0xDCDCDC)
+	// ============
+	// ADD TOOLTIPS
+	// ============
+	const tooltipX1 = am5.Tooltip.new(root1, {});
+	const tooltipY1 = am5.Tooltip.new(root1, {});
+	tooltipX1.get("background").setAll({
+		fillOpacity: 1,
+		fill: am5.color(0x0000FF),
+		strokeOpacity: 0
 	});
-	// ======
-	// CURSOR
-	// ======
+	tooltipY1.get("background").setAll({
+		opacity: 1,
+		fill: am5.color(0x0000FF),
+		strokeOpacity: 0
+	});
+	tooltipX1.label.setAll({
+		fontSize: 12
+		//fill: am5.color(0x1E90FF),
+	});
+	tooltipY1.label.setAll({
+		fontSize: 12
+		//fill: am5.color(0xffff00),
+	});
+	const tooltipX2 = am5.Tooltip.new(root2, {});
+	const tooltipY2 = am5.Tooltip.new(root2, {});
+	tooltipX2.get("background").setAll({
+		fillOpacity: 1,
+		fill: am5.color(0x0000FF),
+		strokeOpacity: 0
+	});
+	tooltipY2.get("background").setAll({
+		opacity: 1,
+		fill: am5.color(0x0000FF),
+		strokeOpacity: 0
+	});
+	tooltipX2.label.setAll({
+		fontSize: 12
+		//fill: am5.color(0x1E90FF),
+	});
+	tooltipY2.label.setAll({
+		fontSize: 12
+		//fill: am5.color(0xffff00),
+	});
+	// ==========
+	// ADD CURSOR
+	// ==========
 	mainPanel1.set("cursor",
 		am5xy.XYCursor.new(root1, {
 			xAxis: dateAxis1,
 			yAxis: valueAxis1,
-			tooltip: am5.Tooltip.new(root1, {})
-		})
-	);
-	// cursor.lineY.set("visible", true);
-	dateAxis1.set("tooltip",
-		am5.Tooltip.new(root1, {})
-	);
-	valueAxis1.set("tooltip",
-		am5.Tooltip.new(root1, {
-			// forceHidden: false
+			//tooltip: am5.Tooltip.new(root1, {})
 		})
 	);
 	let cursor1 = mainPanel1.get("cursor");
 	cursor1.lineX.setAll({
-		stroke: am5.color(0x696969),
+		strokeDasharray: [1, 1],
+		stroke: am5.color(0xFFFFFF),
 		strokeWidth: 1
 	});
 	cursor1.lineY.setAll({
-		stroke: am5.color(0x696969),
-		strokeWidth: 1
+		strokeOpacity: 1,
+		strokeDasharray: [1, 1],
+		stroke: am5.color(0xffffff),
+		strokeWidth: 0.5
 	});
 	mainPanel2.set("cursor",
 		am5xy.XYCursor.new(root2, {
 			xAxis: dateAxis2,
 			yAxis: valueAxis2,
-			tooltip: am5.Tooltip.new(root2, {})
-		})
-	);
-	// cursor.lineY.set("visible", true);
-	dateAxis2.set("tooltip",
-		am5.Tooltip.new(root2, {})
-	);
-	valueAxis2.set("tooltip",
-		am5.Tooltip.new(root2, {
-			// forceHidden: false
+			//tooltip: am5.Tooltip.new(root2, {})
 		})
 	);
 	let cursor2 = mainPanel2.get("cursor");
 	cursor2.lineX.setAll({
-		stroke: am5.color(0x696969),
+		strokeDasharray: [1, 1],
+		stroke: am5.color(0xFFFFFF),
 		strokeWidth: 1
 	});
 	cursor2.lineY.setAll({
-		stroke: am5.color(0x696969),
-		strokeWidth: 1
+		strokeOpacity: 1,
+		strokeDasharray: [1, 1],
+		stroke: am5.color(0xffffff),
+		strokeWidth: 0.5
 	});
+	dateAxis1.set("tooltip", tooltipX1);
+	valueAxis1.set("tooltip", tooltipY1);
+	mainPanel1.panelControls.set("forceHidden", true);
+	dateAxis2.set("tooltip", tooltipX2);
+	valueAxis2.set("tooltip", tooltipY2);
+	mainPanel2.panelControls.set("forceHidden", true);
 	// ===============================
 	// PERIOD SELECTOR TO START SCREEN
 	// ===============================
@@ -366,15 +429,14 @@ onMounted(() => {
 </template-->
 
 <template>
-	<div class="h-screen bg-gray-800">
-		<div class="">
-			<div id="chartcontrols1" class="bg-gray-800"></div>
-			<div id="chartdiv1" class="h-48"></div>
-		</div>
-		<div class="">
-			<div id="chartcontrols2" class="bg-gray-800"></div>
-			<div id="chartdiv2" class="h-48"></div>
-		</div>
+	<div class="h-full bg-gray-900">
+		
+			<!--div id="chartcontrols1" class="bg-gray-800"></div-->
+			<div ref="chartdiv1" class="h-1/2"></div>
+		
+			<!--div id="chartcontrols2" class="bg-gray-800"></div-->
+			<div ref="chartdiv2" class="h-1/2"></div>
+		
 	</div>
 </template>
 

@@ -1,10 +1,10 @@
 <script setup>
-import KlineChart from '../components/KlineChart.vue';
+import ChartDouble from '../components/ChartDouble.vue';
 </script>
 
 <template>
-	<div class="">
-		<KlineChart />
+	<div class="h-screen">
+		<ChartDouble class="" />
 	</div>
 </template>
 
