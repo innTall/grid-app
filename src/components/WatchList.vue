@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+/*
 const symbols = ref(null);
 async function getTickers() {
 	try {
@@ -29,6 +30,7 @@ async function getTickers() {
 getTickers().then((data) => {
 	data;
 })
+*/
 </script>
 
 <template>
@@ -38,7 +40,7 @@ getTickers().then((data) => {
 				class="flex justify-between rounded-2xl border hover:bg-gray-600 border-green-600">
 				<div class="flex items-center">
 					<div class="">
-						<input type="checkbox" class="bg-gray-600 rounded-l ml-2 h-8 border-2 border-green-600 text-green-400 w-3">
+						<input type="checkbox" name="check" class="bg-gray-600 rounded-l ml-2 h-8 border-2 border-green-600 text-green-400 w-3">
 					</div>
 					<figure class="p-2">
 						<img class="w-8 h-8 rounded-full" src="../public/images/user.png">

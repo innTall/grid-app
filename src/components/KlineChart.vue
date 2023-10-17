@@ -19,7 +19,7 @@ onMounted(() => {
 	const myTheme = am5.Theme.new(root);
 	myTheme.rule("AxisLabel").setAll({
 		fill: am5.color(0xffffff),
-		fontSize: 12
+		fontSize: 10
 	});
 	myTheme.rule("AxisRenderer").setAll({
 		stroke: am5.color(0x008000),
@@ -35,7 +35,18 @@ onMounted(() => {
 	});
 	myTheme.rule("Label").setAll({
 		fill: am5.color(0xffffff),
-		fontSize: 12
+		fontSize: 10
+	});
+	myTheme.rule("RoundedRectangle", ["legend"]).setAll({
+		opacity: 0
+	});
+	myTheme.rule("PanelControls").setAll({
+		forceHidden: true
+	});
+	myTheme.rule("Legend", ["indicator"]).setAll({
+		opacity: 0,
+		shortName: true
+
 	});
 	root.setThemes([
 		myTheme,
@@ -47,8 +58,8 @@ onMounted(() => {
 	// ==========
 	const stockChart = root.container.children.push(
 		am5stock.StockChart.new(root, {
-			panX: true,
-			wheelY: "zoomX"
+			//panX: true,
+			//wheelY: "zoomX"
 		})
 	);
 	// ==================
@@ -56,9 +67,8 @@ onMounted(() => {
 	// ==================
 	let mainPanel = stockChart.panels.push(
 		am5stock.StockPanel.new(root, {
-			wheelY: "zoomX", // scale big/small
-			panX: true,
-			pinchZoomX: true, // ?????????
+			wheelY: "zoomX",
+			panX: true
 		})
 	);
 	// ===============
@@ -71,7 +81,8 @@ onMounted(() => {
 				strokeOpacity: 1,
 				strokeWidth: 1,
 				stroke: am5.color(0x008000),
-				minGridDistance: 30
+				minGridDistance: 30,
+				maxDeviation: 0.1 // top-left legend
 			})
 		})
 	);
@@ -82,7 +93,8 @@ onMounted(() => {
 				strokeWidth: 1,
 				stroke: am5.color(0x008000),
 				opposite: true
-			})
+			}),
+			numberFormat: "#,###.0"
 		})
 	);
 	// =====================
@@ -157,8 +169,8 @@ onMounted(() => {
 		dateAxis.data.setAll(data);
 		//series.data.setAll(data);
 		valueSeries.data.setAll(data),
-			volumeSeries.data.setAll(data),
-			valueLegend.data.setAll([valueSeries]);
+		volumeSeries.data.setAll(data),
+		valueLegend.data.setAll([valueSeries]);
 	}).catch((result) => {
 		console.log("Error loading " + result.xhr.responseURL);
 	});
@@ -192,11 +204,11 @@ onMounted(() => {
 		strokeOpacity: 0
 	});
 	tooltipX.label.setAll({
-		fontSize: 12
+		fontSize: 10
 		//fill: am5.color(0x1E90FF),
 	});
 	tooltipY.label.setAll({
-		fontSize: 12
+		fontSize: 10
 		//fill: am5.color(0xffff00),
 	});
 	// ==========
@@ -233,11 +245,40 @@ onMounted(() => {
 	valueSeries.events.on("datavalidated", () => {
 		periodSelector.selectPeriod({ timeUnit: "month", count: 3 })
 	})
+
+// ============================
+// SECONDARY -INDICATORS- PANEL
+// ============================
+// *** Awesome Oscillator ***
+const aoInd = stockChart.indicators.push( // vol
+	am5stock.AwesomeOscillator.new(root, {
+		stockChart: stockChart,
+		stockSeries: valueSeries,
+		y: am5.percent(100),
+		centerY: am5.percent(100),
+		shortName: "AO",
+		legendLabelText: "{shortName}"
+	})
+);
+aoInd.set("aoInd", aoInd);
+
+// *** Relative Strength Index ***
+const rsiInd = stockChart.indicators.push(
+	am5stock.RelativeStrengthIndex.new(root, {
+		stockChart: stockChart,
+		stockSeries: valueSeries,
+		y: am5.percent(100),
+		centerY: am5.percent(100),
+		shortName: "RSI",
+		legendLabelText: "{shortName}"
+	}),
+	);
+	rsiInd.set("rsiInd", rsiInd);
 });
 </script>
 <template>
-	<div class="h-screen">
-		<div ref="chartdiv" class="h-1/3"></div>
+	<div class="w-full h-full">
+		<div ref="chartdiv" class="h-full"></div>
 	</div>
 </template>
 
