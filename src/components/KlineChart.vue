@@ -278,7 +278,7 @@ const rsiInd = stockChart.indicators.push(
 </script>
 <template>
 	<div class="w-full h-full">
-		<div ref="chartdiv" class="h-full"></div>
+		<div ref="chartdiv" class="h-60"></div>
 	</div>
 </template>
 

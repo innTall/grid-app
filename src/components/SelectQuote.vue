@@ -1,19 +1,38 @@
 <script setup>
-//["ARS", "AUD", "BIDR", "BKRW", "BNB", "BRL", "BTC", "BUSD", "BVND", "DAI", "DOGE",
-//"DOT", "ETH", "EUR", "FDUSD", "GBP", "IDRT", "NGN", "PAX", "PLN", "RON", "RUB", "TRX",
-//"TRY", "TUSD", "UAH", "USDC", "USDP", "USDS", "USDT", "UST", "VAI", "XRP", "ZAR"]
+import { ref, watch } from 'vue';
+const assets = ref([]);
+async function getQuoteAsset() {
+	try {
+		const url = 'src/data/quoteAssets.json';
+		const response = await fetch(url);
+		const data = await response.json();
+		assets.value = data;
+	} catch (err) {
+		console.error('error ocurred', err);
+	}
+}
+getQuoteAsset().then((data) => {
+	data;
+})
+const selected = ref('');
+const optionSelect = (e) => {
+	selected.value = e.target.value
+}
+selected.value = localStorage.getItem('selected');
+watch(selected, (newValue) => {
+	if (newValue)
+		localStorage.setItem('selected', newValue)
+});
 </script>
 
 <template>
 	<div class="h-8 text-sm text-gray-300">
-		<select name="quoteAssets" class="bg-gray-800">
-			<option value="BNB">BNB</option>
-			<option value="BTC">BTC</option>
-			<option value="BUSD" selected>BUSD</option>
-			<option value="ETH">ETH</option>
-			<option value="EUR">EUR</option>
-			<option value="USDT">USDT</option>
+		<select @change="optionSelect" v-model="selected" class="bg-gray-800">
+			<option v-for="asset in assets" :key="asset">
+				{{ asset }}
+			</option>
 		</select>
+		<!--p>Selected value: {{ selected }}</p-->
 	</div>
 </template>
 <style scoped></style>
