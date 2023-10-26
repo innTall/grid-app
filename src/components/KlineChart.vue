@@ -46,7 +46,6 @@ onMounted(() => {
 	myTheme.rule("Legend", ["indicator"]).setAll({
 		opacity: 0,
 		shortName: true
-
 	});
 	root.setThemes([
 		myTheme,
@@ -58,6 +57,10 @@ onMounted(() => {
 	// ==========
 	const stockChart = root.container.children.push(
 		am5stock.StockChart.new(root, {
+			paddingRight: 0,
+			paddingTop: 0,
+			paddingLeft: 5,
+			paddingBottom: 0
 			//panX: true,
 			//wheelY: "zoomX"
 		})
@@ -250,35 +253,37 @@ onMounted(() => {
 // SECONDARY -INDICATORS- PANEL
 // ============================
 // *** Awesome Oscillator ***
-const aoInd = stockChart.indicators.push( // vol
-	am5stock.AwesomeOscillator.new(root, {
-		stockChart: stockChart,
-		stockSeries: valueSeries,
-		y: am5.percent(100),
-		centerY: am5.percent(100),
-		shortName: "AO",
-		legendLabelText: "{shortName}"
-	})
-);
-aoInd.set("aoInd", aoInd);
+	const aoInd = stockChart.indicators.push( // vol
+		am5stock.AwesomeOscillator.new(root, {
+			stockChart: stockChart,
+			stockSeries: valueSeries,
+			y: am5.percent(20),
+			centerY: am5.percent(20),
+			shortName: "AO",
+			legendLabelText: "{shortName}"
+		})
+	);
+	aoInd.set("aoInd", aoInd);
 
-// *** Relative Strength Index ***
-const rsiInd = stockChart.indicators.push(
-	am5stock.RelativeStrengthIndex.new(root, {
-		stockChart: stockChart,
-		stockSeries: valueSeries,
-		y: am5.percent(100),
-		centerY: am5.percent(100),
-		shortName: "RSI",
-		legendLabelText: "{shortName}"
-	}),
+	// *** Relative Strength Index ***
+	const rsiInd = stockChart.indicators.push(
+		am5stock.RelativeStrengthIndex.new(root, {
+			stockChart: stockChart,
+			stockSeries: valueSeries,
+			paddingTop: 0,
+			height: am5.percent(60),
+			y: am5.percent(10),
+			centerY: am5.percent(10),
+			shortName: "RSI",
+			legendLabelText: "{shortName}"
+		}),
 	);
 	rsiInd.set("rsiInd", rsiInd);
 });
 </script>
 <template>
-	<div class="w-full h-full">
-		<div ref="chartdiv" class="h-60"></div>
+	<div class="">
+		<div ref="chartdiv" class="h-72"></div>
 	</div>
 </template>
 

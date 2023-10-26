@@ -218,20 +218,14 @@ const columns = computed(() => {
 
 <template>
 	<div>
-		<div class="flex justify-between items-center gap-2 pl-2 pr-2">
-			<div class="w-1/5 items-center">
-				<ModalSettings />
-			</div>
-			<div class="w-3/5">
-				<SetPanel />
-			</div>
-			<div class="w-1/5 items-center">
-				<ModalConfirm :deposit=$Deposit :orders=Num :first_level="buyLevel1" />
-			</div>
+		<div class="flex items-center justify-around p-2 border mb-2">
+			<ModalSettings />
+			<SetPanel />
+			<ModalConfirm :deposit=$Deposit :orders=Num :first_level=buyLevel1 :first_order=buyOrder1 :profit=TP />
 		</div>
 		<div>
 			<table id="secondTable">
-				<thead class="bg-gray-700 text-xs text-gray-300">
+				<thead class="bg-gray-700 text-sm">
 					<tr>
 						<th v-for="col in columns" :key="col.id">{{ col }}</th>
 					</tr>

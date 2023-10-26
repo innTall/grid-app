@@ -26,9 +26,9 @@ watch(selected, (newValue) => {
 </script>
 
 <template>
-	<div class="h-8 text-sm text-gray-300">
-		<select @change="optionSelect" v-model="selected" class="bg-gray-800">
-			<option v-for="asset in assets" :key="asset">
+	<div class="h-8 text-sm">
+		<select @change="optionSelect" v-model="selected" class="bg-gray-900 border rounded-lg h-8 text-sm">
+			<option v-for="asset in assets" :key="asset" class="">
 				{{ asset }}
 			</option>
 		</select>

@@ -41,31 +41,31 @@ watch(Order_coef, (newValue) => {
 
 <template>
 	<button @click="open = true"
-		class="bg-gray-700 text-green-500 text-xs only:p-1 rounded-lg border-2 border-green-600">Options</button>
+		class="text-sm p-2 rounded-lg border hover:bg-gray-700">Options</button>
 	<Teleport to="body">
-		<div v-show="open" class="container fixed top-20 left-10 bg-gray-800 text-gray-300 z-10 rounded-lg p-2 w-2/3">
+		<div v-show="open" class="container fixed top-20 left-10 bg-gray-800 text-white z-10 border rounded-3xl p-2 w-1/2">
 			<div class="text-right">
-				<label>Deposit:
-					<input type="number" id="deposit" v-model.number="Deposit" step="100" required class="w-1/3">
+				<label class="">Deposit:
+					<input type="number" id="deposit" v-model.number="Deposit" step="100" required class="w-1/3 bg-gray-900 font-bold">
 				</label><br>
 				<label>Grids:
-					<input type="number" v-model.number="Grids" step="1" required class="w-1/3">
+					<input type="number" v-model.number="Grids" step="1" required class="w-1/3 bg-gray-900 font-bold">
 				</label><br>
 				<label>Grid_freq:
-					<input type="number" v-model.number="Grid_freq" step="0.5" required class="w-1/3">
+					<input type="number" v-model.number="Grid_freq" step="0.5" required class="w-1/3 bg-gray-900 font-bold">
 				</label><br>
 				<label>Level_first:
-					<input type="number" v-model.number="Level_first" step="0.1" required class="w-1/3">
+					<input type="number" v-model.number="Level_first" step="0.1" required class="w-1/3 bg-gray-900 font-bold">
 				</label><br>
 				<label>Order_min:
-					<input type="number" v-model.number="Order_min" step="0.05" required class="w-1/3">
+					<input type="number" v-model.number="Order_min" step="0.05" required class="w-1/3 bg-gray-900 font-bold">
 				</label><br>
 				<label>Order_coef:
-					<input type="number" v-model.number="Order_coef" step="0.05" required class="w-1/3">
+					<input type="number" v-model.number="Order_coef" step="0.05" required class="w-1/3 bg-gray-900 font-bold">
 				</label><br>
 			</div>
 			<div>
-				<button @click="open = false" class="bg-gray-700">Close</button>
+				<button @click="open = false" class="bg-gray-900 p-1 border rounded-md">Close</button>
 			</div>
 		</div>
 	</Teleport>

@@ -4,14 +4,9 @@ import SmallWatch from '../components/SmallWatch.vue';
 </script>
 
 <template>
-	<div class="flex w-full h-full">
+	<div class="flex">
 		<ChartDouble class="left-0 top-0 fixed" />
-		<div class="w-3/4">
-
-		</div>
-		<div class="">
-			<SmallWatch class="" />
-		</div>
+		<SmallWatch class="" />
 	</div>
 </template>
 

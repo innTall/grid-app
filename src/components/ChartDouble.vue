@@ -75,10 +75,20 @@ onMounted(() => {
 	// STOCKCHART
 	// ==========
 	let stockChart1 = root1.container.children.push(
-		am5stock.StockChart.new(root1, {})
+		am5stock.StockChart.new(root1, {
+			paddingRight: 0,
+			paddingTop: 0,
+			paddingLeft: 5,
+			paddingBottom: 0
+		})
 	);
 	let stockChart2 = root2.container.children.push(
-		am5stock.StockChart.new(root2, {})
+		am5stock.StockChart.new(root2, {
+			paddingRight: 0,
+			paddingTop: 0,
+			paddingLeft: 5,
+			paddingBottom: 0
+		})
 	);
 	// ================
 	// MAIN -STOCK- PANEL
@@ -424,19 +434,12 @@ onMounted(() => {
 });
 </script>
 
-<!--template>
-	<div id="chartdiv1" class="h-96"></div>
-</template-->
-
 <template>
-	<div class="h-full w-3/4 py-12 bg-gray-900">
-
+	<div class="h-screen w-3/4 py-12">
 		<!--div id="chartcontrols1" class="bg-gray-800"></div-->
 		<div ref="chartdiv1" class="h-1/2"></div>
-
 		<!--div id="chartcontrols2" class="bg-gray-800"></div-->
 		<div ref="chartdiv2" class="h-1/2"></div>
-
 	</div>
 </template>
 
