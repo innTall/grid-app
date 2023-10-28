@@ -1,13 +1,12 @@
 <script setup>
 import { TrashIcon, XCircleIcon, XMarkIcon } from '@heroicons/vue/24/solid';
-import { ref, reactive } from 'vue';
+import { ref, reactive } from "vue";
 const stLocal = window.localStorage;
-const asset = stLocal.getItem('selected');
-const symbols = ref(null);
+const asset = stLocal.getItem("selected");
+const symbols = ref("");
 async function getSymbols() {
 	try {
-		const uri = 'https://api.binance.com/api/v3/ticker/price';
-		//const uri = 'src/data/tickers.json';
+		const uri = "src/data/tickers.json";
 		const response = await fetch(uri);
 		const data = await response.json();
 		const result = data.filter((item) => item.symbol.endsWith(asset));
@@ -16,14 +15,13 @@ async function getSymbols() {
 		}
 		let list = result.sort(sortArray);
 		symbols.value = reactive(list);
-		console.log(symbols);
 	} catch (err) {
 		console.log("error occured", err);
-	}	
+	}
 }
 getSymbols().then((data) => {
 	data;
-})
+});
 function removeSymbol(symbol) {
 	symbols.value = symbols.value.filter(element => element !== symbol)
 }
@@ -51,4 +49,26 @@ function removeSymbol(symbol) {
 	</div>
 </template>
 
+<!--template>
+	<div class="">
+		<a href="chart" class="space-y-1">
+			<article v-for="symbol in symbols" :key="symbol.symbol"	class="flex justify-between pl-2 pr-2 p-1 rounded-xl border hover:bg-gray-600 border-green-600">
+				<div class="flex items-center gap-2">
+					<input type="checkbox" name="check" class="border border-green-600 text-green-600 ">
+					<img class="w-10 h-10 rounded-full" src="../public/images/user.png">
+					<div class="text-md">
+      			<div class="font-bold">{{ symbol.symbol }}</div>
+      			<div class="">token name</div>
+    			</div>
+				</div>
+				<div class="flex justify-end">
+					<div class="text-md text-right">
+						<div class="font-bold">{{ symbol.price * 1 }}</div>
+						<div class="">volume</div>
+					</div>
+				</div>
+			</article>
+		</a>
+	</div>
+</template-->
 <style scoped></style>

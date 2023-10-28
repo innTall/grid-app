@@ -9,7 +9,7 @@ import {
 <template>
 	<ul class="flex items-center gap-5">
 		<li class="flex-1">
-			<a href="/" class="flex flex-col text-xs capitalize items-center">
+			<a href="/test" class="flex flex-col text-xs capitalize items-center">
 				<QueueListIcon class="h-6 w-6" /> watchlist
 			</a>
 		</li>

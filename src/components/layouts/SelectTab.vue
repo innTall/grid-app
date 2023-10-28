@@ -14,21 +14,24 @@ async function getQuoteAsset() {
 getQuoteAsset().then((data) => {
 	data;
 })
+//const emit = defineEmits(['update: selected']);
 const selected = ref('');
 const optionSelect = (e) => {
+	//emit('update: selected', e),
 	selected.value = e.target.value
 }
 selected.value = localStorage.getItem('selected');
 watch(selected, (newValue) => {
 	if (newValue)
 		localStorage.setItem('selected', newValue)
+	return selected
 });
 </script>
 
 <template>
 	<div class="h-8 text-sm">
-		<select @change="optionSelect" v-model="selected" class="bg-gray-900 border rounded-lg h-8 text-sm">
-			<option v-for="asset in assets" :key="asset" class="">
+		<select @change="optionSelect" v-model="selected" id="sel" class="bg-gray-900 border rounded-lg h-8 text-sm">
+			<option v-for="asset in assets" :key="asset.value" class="">
 				{{ asset }}
 			</option>
 		</select>

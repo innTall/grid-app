@@ -5,36 +5,18 @@ import OrderList from '../components/OrderList.vue';
 import { ref, reactive } from 'vue';
 const symbol = ref('');
 const price = ref('');
-const modalVisible = ref(false);
+//const modalVisible = ref(false);
 const orders = ref([]);
 function addOrder(order) {
   orders.value.push(order);
-  modalVisible.value = false;
+  //modalVisible.value = false;
 }
 function removeOrder(order) {
   orders.value = orders.value.filter(p => p.id !== order.id)
 }
-function showModal() {
-  modalVisible.value = true;
-}
-async function fetchTickers() {
-  try {
-    const uri = 'https://api.binance.com/api/v3/ticker/price';
-    const response = await fetch(uri);
-    const data = await response.json();
-    function sortArray(x, y) {
-      return x.symbol.localeCompare(y.symbol);
-    }
-    let list = data.sort(sortArray);
-    orders.value = reactive(list);
-    console.log(orders);
-  } catch (error) {
-    console.log("Fetch error: ", error);
-  }
-}
-fetchTickers().then((data) => {
-  data;
-})
+//function showModal() {
+//  modalVisible.value = true;
+//}
 </script>
 
 <template>

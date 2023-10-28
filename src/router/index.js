@@ -22,6 +22,11 @@ const router = createRouter({
       name: "Trade",
       component: () => import("../views/TradePage.vue"),
     },
+    {
+      path: "/test",
+      name: "Test",
+      component: () => import("../views/TestWatch.vue"),
+    },
   ],
 });
 export default router;
