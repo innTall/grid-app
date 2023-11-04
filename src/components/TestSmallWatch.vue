@@ -1,6 +1,6 @@
 <script setup>
 import pairs from '../data/tickers.json';
-import { computed, ref, reactive } from 'vue';
+import { ref, reactive } from 'vue';
 const stLocal = window.localStorage;
 const asset = stLocal.getItem('selected');
 const symbols = ref(null);
@@ -14,8 +14,8 @@ symbols.value = reactive(list);
 </script>
 
 <template>
-	<div class="">
-		<a href="" class="mt-1 text-right">
+	<div>
+		<a href="#" class="mt-1 text-right">
 			<article v-for="symbol in symbols" :key="symbol" :="asset"
 				class="h-12 w-30 flex justify-end hover:bg-gray-600">
 				<div class="flex p-2 gap-2 border-b items-center border-green-600">
@@ -23,7 +23,7 @@ symbols.value = reactive(list);
 						<p class="font-bold mb-2">{{ symbol.symbol }}</p>
 						<p class="font-thin">{{ symbol.price * 1 }}</p>
 					</div>
-					<input type="checkbox" name="check" class="">
+					<input type="checkbox" name="check">
 				</div>
 			</article>
 		</a>

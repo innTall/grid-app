@@ -14,10 +14,8 @@ async function getQuoteAsset() {
 getQuoteAsset().then((data) => {
 	data;
 })
-//const emit = defineEmits(['update: selected']);
 const selected = ref('');
 const optionSelect = (e) => {
-	//emit('update: selected', e),
 	selected.value = e.target.value
 }
 selected.value = localStorage.getItem('selected');

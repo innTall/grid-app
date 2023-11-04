@@ -37,6 +37,12 @@ watch(Order_coef, (newValue) => {
 	if (newValue)
 		localStorage.setItem('order_coef', newValue)
 });
+const First_order = ref('');
+First_order.value = localStorage.getItem('first_order');
+watch(First_order, (newValue) => {
+	if (newValue)
+		localStorage.setItem('first_order', newValue)
+});
 </script>
 
 <template>
@@ -62,6 +68,9 @@ watch(Order_coef, (newValue) => {
 				</label><br>
 				<label>Order_coef:
 					<input type="number" v-model.number="Order_coef" step="0.05" required class="w-1/3 bg-gray-900 font-bold">
+				</label><br>
+				<label>First_order:
+					<input type="number" v-model.number="First_order" step="1" required class="w-1/3 bg-gray-900 font-bold">
 				</label><br>
 			</div>
 			<div>

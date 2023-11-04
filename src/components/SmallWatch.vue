@@ -1,6 +1,6 @@
 <script setup>
 import pairs from '../data/watchList.json';
-import { reactive, computed } from 'vue';
+import { reactive } from 'vue';
 function sortArray(x, y) {
 	return x.symbol.localeCompare(y.symbol);
 }

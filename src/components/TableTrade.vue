@@ -8,7 +8,7 @@ const $Deposit = stLocal.getItem('deposit');
 const $Grids = stLocal.getItem('grids');
 const $Grid_freq = stLocal.getItem('grid_freq');
 const $Level_first = stLocal.getItem('level_first');
-const $Order_min = stLocal.getItem('order_min');
+const $First_order = stLocal.getItem('first_order');
 const $Order_coef = stLocal.getItem('order_coef');
 
 const MAX_price = stLocal.getItem('maxPrice');
@@ -72,15 +72,17 @@ console.log(Buy);
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // ***** BUY-order-$ ***** BUYLIMIT []
+const errorMessage = ref('');
 const gridCost = ($Deposit / $Grids).toFixed(2);
+const minDeposit = Math.ceil($First_order * (1 - $Order_coef ** Num) / (1 - $Order_coef));
 const buyOrder1 = (gridCost / ((1 - $Order_coef ** Num) / (1 - $Order_coef))).toFixed(2);
-if (buyOrder1 < 12) {
-	alert('Order too small !!!');
+if (+buyOrder1 < $First_order) {
+	alert('Order too small !!!\n minDeposit: ' + `${minDeposit}`);
 }
 else {
 	//alert(`Grid: ${gridCost} & 1st order: ${buyOrder1}`)
 }
-console.log(gridCost, Num, buyOrder1);
+console.log(gridCost, Num, buyOrder1, $First_order, minDeposit);
 
 const buyOrderNext = buyOrder1 * $Order_coef ** (Num);
 const buyOrdersext = (end, start = buyOrder1, step = $Order_coef) =>

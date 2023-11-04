@@ -1,12 +1,12 @@
 <script setup>
 import ChartDouble from '../components/ChartDouble.vue';
-import TestSmallWatch from '../components/TestSmallWatch.vue';
+import SmallWatch from '../components/SmallWatch.vue';
 </script>
 
 <template>
 	<div class="flex">
 		<ChartDouble class="left-0 top-0 fixed" />
-		<TestSmallWatch class="" />
+		<SmallWatch class="flex flex-grow flex-col" />
 	</div>
 </template>
 
